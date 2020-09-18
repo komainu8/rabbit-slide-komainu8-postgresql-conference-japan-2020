@@ -1,12 +1,20 @@
 ---
 id: postgresql-conference-japan-2020
 base_name: how-to-management-method-for-pgroonga-wal
-tags: []
-presentation_date: 
-presentation_start_time: 
-presentation_end_time: 
+tags:
+- rabbit
+- postgresql
+- pgcon20j
+- fts
+- search
+- pgroonga
+- groonga
+presentation_date: 2020-11-13
+presentation_start_time: 2020-11-13T16:10:00+09:00
+presentation_end_time: 2020-11-13T17:00:00+09:00
 version: 1.0.0
-licenses: []
+licenses:
+- CC-BY-SA-4.0
 slideshare_id: 
 speaker_deck_id: 
 ustream_id: 
@@ -14,8 +22,8 @@ vimeo_id:
 youtube_id: 
 author:
   markup_language: :rd
-  name: 
-  email: 
-  rubygems_user: 
+  name: Horimoto Yasuhiro
+  email: horimoto@clear-code.comment
+  rubygems_user: komainu8
   slideshare_user: 
   speaker_deck_user: 
