@@ -27,12 +27,92 @@
 
 = 目次
 
-  * 項目1
-  * 項目2
-  * 項目3
+  * PGroongaの紹介
+  * PGroongaのレプリケーション
+  * レプリケーションの注意点
+  * WALのメンテナンス
 
-= 二番目のスライド
+= PGroongaの紹介
 
-  # image
-  # src = https://raw.github.com/rabbit-shocker/rabbit/master/sample/lavie.png
-  # relative_height = 100
+PGroongaとは？
+
+= PGroongaの紹介
+
+PostgreSQL経由で高速な全文検索ができる拡張
+
+= PGroongaの紹介
+
+PostgreSQLの拡張として使用
+
+= PGroongaの紹介
+
+簡単に使える
+
+= PGroongaの紹介
+
+安定して速い
+
+= PGroongaの紹介
+
+* 追加されたデータは即時検索可能
+  * すぐに検索できる
+
+= PGroongaの紹介
+
+* 更新中も検索性能が落ちない
+* ヒット数が多くても検索性能が落ちない
+
+= PGroongaの紹介
+
+使い方
+
+= PGroongaの紹介
+
+B-treeやGIN等と同様にCREAT INDEXで使える
+
+= PGroongaの紹介
+
+  # coderay sql
+
+  CREATE TABLE memos (
+    id integer,
+    content text
+  );
+
+  CREATE INDEX pgroonga_content_index ON memos USING pgroonga (content);
+
+= PGroongaの紹介
+
+  # coderay sql
+
+  INSERT INTO memos VALUES (1, 'PostgreSQLはリレーショナル・データベース管理システムです。');
+  INSERT INTO memos VALUES (2, 'Groongaは日本語対応の高速な全文検索エンジンです。');
+  INSERT INTO memos VALUES (3, 'PGroongaはインデックスとしてGroongaを使うためのPostgreSQLの拡張機能です。');
+  INSERT INTO memos VALUES (4, 'groongaコマンドがあります。');
+
+  SELECT * FROM memos WHERE content &@ '全文検索';
+  --  id |                      content                      
+  -- ----+---------------------------------------------------
+  --   2 | Groongaは日本語対応の高速な全文検索エンジンです。
+  -- (1 row)
+
+= PGroongaのレプリケーション
+
+PGroongaもレプリケーション機能がある
+
+= PGroongaのレプリケーション
+
+PostgreSQLのストリーミングレプリケーション機能を使う
+
+= PGroongaのレプリケーション
+
+* WAL書き込みの図を入れる。
+
+= PGroongaのレプリケーション
+
+PGroongaのインデックスをWALに書き込む
+
+
+
+
+
