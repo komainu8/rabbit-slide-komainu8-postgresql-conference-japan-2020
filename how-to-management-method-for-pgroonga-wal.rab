@@ -110,7 +110,198 @@ PostgreSQLのストリーミングレプリケーション機能を使う
 
 = PGroongaのレプリケーション
 
-PGroongaのインデックスをWALに書き込む
+レプリケーションしていない場合
+
+= PGroongaのレプリケーション
+
+系を切り替えた後にREINDEXが必要
+
+= PGroongaのレプリケーション
+
+REINDEXは格納されているデータからインデックスを生成
+
+= PGroongaのレプリケーション
+
+データ量が多いほど時間がかかる
+
+= PGroongaのレプリケーション
+
+REINDEXが遅いせいで復旧も遅くなってしまう
+
+= PGroongaのレプリケーション
+
+レプリケーションしている場合
+
+= PGroongaのレプリケーション
+
+ストリーミングレプリケーションによって、プライマリーのDBと同じものができている。
+
+= PGroongaのレプリケーション
+
+系を切り替えた後にREINDEXが不要になる
+
+= PGroongaのレプリケーション
+
+REINDEXしないので、復旧時間を短縮できる
+
+= レプリケーションの注意点
+
+ただ、PGroongaのレプリケーションはクラッシュセーフではない
+
+= レプリケーションの注意点
+
+以下の処理中にクラッシュするとREINDEXでの復旧が必要
+
+* PGroongaのインデックス更新中
+* 削除済みのレコードに対する検索中
+* VACUUM実行中
+
+= レプリケーションの注意点
+
+PGroongaのインデックス更新中の破損を図で書く
+
+= レプリケーションの注意点
+
+削除済みのレコードに対する検索中の破損を図で書く
+
+= レプリケーションの注意点
+
+VACUUM実行中の破損を図で書く
+
+= PGroongaのインデックスサイズ
+
+PGroongaのインデックスは高速化のため、以下の情報を保持しているのでサイズが大きい
+
+* トークンの出現位置
+* PostgreSQLに保存しているインデックス対象のテキスト
+
+= PGroongaのインデックスサイズ
+
+ある程度以上の規模のデータベースでは、ストレージ容量の圧迫の問題が出てくる
+
+= PGroongaのインデックスサイズ
+
+定期的なVACCUMによって、不要なインデックスを削除し再利用可能な領域にする
+
+= PGroongaのインデックスサイズ
+
+定期的にVACUUMすることで、インデックスサイズは一定の範囲に収まる
+
+= PGroongaのインデックスサイズ
+
+定期的にVACUUMしていても、インデックスのサイズが増え続けることがある
+
+= PGroongaのインデックスサイズ
+
+REINDEXしない限り増え続ける。。。
+
+= PGroongaのインデックスサイズ
+
+原因はWAL
+
+= PGroongaのインデックスサイズ
+
+PGroongaのWALは定期的に削除しないと増え続ける
+
+= PGroongaのインデックスサイズ
+
+PGroongaのストリーミング機能を使っていてREINDEXせずにずっと運用していると、
+PGroongaのインデックスサイズが増加し続けて、いずれストレージを満杯にする
+
+= PGroongaのWALの運用方法
+
+PGroongaのWALは定期的なメンテナンスが必要
+
+= PGroongaのWALの運用方法
+
+メンテナンス方法は以下の2つ
+
+* REINDEXによるインデックス再構築
+* WALを定期的に削除
+
+= PGroongaのWALの運用方法
+
+REINDEXによるインデックス再構築はデータ量が多いと時間がかかる
+
+= PGroongaのWALの運用方法
+
+大規模なデータベースでは、REINDEXは定期的に実行するのに向かない
+
+= PGroongaのWALの運用方法
+
+規模が小さければ、REINDEXは手軽に実行できるのでWALの削除より実行しやすい
+
+= PGroongaのWALの運用方法
+
+規模が大きい場合は、WALの定期的な削除がおすすめ
+
+= PGroongaのWALの運用方法
+
+PGroongaのWALは削除しても、そのスペースをOSに返さないので、ファイルサイズは減少しない
+
+= PGroongaのWALの運用方法
+
+増加しなくなるだけ
+
+= PGroongaのWALの運用方法
+
+PGroongaのWALのを削除するには、 pgroonga_wal_trancate を使う
+
+= PGroongaのWALの運用方法
+
+  # coderay sql
+
+    SELECT pgroonga_wal_truncate('インデックス名');
+
+= PGroongaのWALの運用方法
+
+ただ、単純に削除すると、未適用のWALのまで削除してしまう可能性がある
+
+= PGroongaのWALの運用方法
+
+削除する前に、確実にWALを適用させておく必要がある
+
+= PGroongaのWALの運用方法
+
+WALを適用するには、 pgroonga_wal_apply を使う
+
+= PGroongaのWALの運用方法
+
+  # coderay sql
+
+    SELECT pgroonga_wal_apply('インデックス名');
+
+= PGroongaのWALの運用方法
+
+削除手順
+
+* プライマリーのDBで対象のテーブルをロック
+* すべてのセカンダリーのDB程度でWALを適用
+* プライマリーのDB程度でWALを削除
+* テーブルのロックを解除
+
+= PGroongaのWALの運用方法
+
+プライマリーのDBで対象のテーブルをロックの図
+
+= PGroongaのWALの運用方法
+
+すべてのセカンダリーのDB程度でWALを適用の図
+
+= PGroongaのWALの運用方法
+
+プライマリーのDB程度でWALを削除の図
+
+= PGroongaのWALの運用方法
+
+テーブルのロックを解除の図
+
+
+
+
+
+
+
 
 
 
