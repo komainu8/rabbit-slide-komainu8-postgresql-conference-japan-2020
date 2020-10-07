@@ -25,52 +25,25 @@
   # src = images/self-introduction.png
   # relative_height = 107
 
-= 目次
+= 今日のテーマ
 
-  * PGroongaの紹介
-  * PGroongaのレプリケーション
-  * レプリケーションの注意点
-  * WALのメンテナンス
+PGroongaの\nレプリケーションを\n((*うまく*))使おう
 
 = PGroongaの紹介
 
-PGroongaとは？
+...の前に
 
 = PGroongaの紹介
 
-PostgreSQL経由で高速な全文検索ができる拡張
+そもそも、PGroongaとは？
 
-= PGroongaの紹介
+= PGroongaとは？
 
-PostgreSQLの拡張として使用
+PostgreSQL経由で\n((*高速な全文検索*))ができる拡張
 
-= PGroongaの紹介
+= 使い方(インデックス設定)
 
-簡単に使える
-
-= PGroongaの紹介
-
-安定して速い
-
-= PGroongaの紹介
-
-* 追加されたデータは即時検索可能
-  * すぐに検索できる
-
-= PGroongaの紹介
-
-* 更新中も検索性能が落ちない
-* ヒット数が多くても検索性能が落ちない
-
-= PGroongaの紹介
-
-使い方
-
-= PGroongaの紹介
-
-B-treeやGIN等と同様にCREAT INDEXで使える
-
-= PGroongaの紹介
+↓のように使う
 
   # coderay sql
 
@@ -79,16 +52,19 @@ B-treeやGIN等と同様にCREAT INDEXで使える
     content text
   );
 
-  CREATE INDEX pgroonga_content_index ON memos USING pgroonga (content);
+  CREATE INDEX pgroonga_content_index
+  ON memos
+  USING pgroonga (content);
 
-= PGroongaの紹介
+= 使い方(全文検索)
 
   # coderay sql
 
-  INSERT INTO memos VALUES (1, 'PostgreSQLはリレーショナル・データベース管理システムです。');
-  INSERT INTO memos VALUES (2, 'Groongaは日本語対応の高速な全文検索エンジンです。');
-  INSERT INTO memos VALUES (3, 'PGroongaはインデックスとしてGroongaを使うためのPostgreSQLの拡張機能です。');
-  INSERT INTO memos VALUES (4, 'groongaコマンドがあります。');
+  INSERT INTO memos
+  VALUES (1, 'PostgreSQLはリレーショナル・データベース管理システムです。');
+
+  INSERT INTO memos
+  VALUES (2, 'Groongaは日本語対応の高速な全文検索エンジンです。');
 
   SELECT * FROM memos WHERE content &@ '全文検索';
   --  id |                      content                      
@@ -96,59 +72,120 @@ B-treeやGIN等と同様にCREAT INDEXで使える
   --   2 | Groongaは日本語対応の高速な全文検索エンジンです。
   -- (1 row)
 
-= PGroongaのレプリケーション
+= 使い方
 
-PGroongaもレプリケーション機能がある
+((*簡単！*))\n
+B-treeやGINと同じように使える
 
-= PGroongaのレプリケーション
+= 速度
 
-PostgreSQLのストリーミングレプリケーション機能を使う
+((*超*))速い
 
-= PGroongaのレプリケーション
+= 速度
 
-* WAL書き込みの図を入れる。
+追加されたデータは((*即時*))検索可能
 
-= PGroongaのレプリケーション
+= 速度
 
-レプリケーションしていない場合
+検索可能になるのが((*速い*))
 
-= PGroongaのレプリケーション
+= 速度
 
-系を切り替えた後にREINDEXが必要
+更新中も検索性能が((*落ちない*))
 
-= PGroongaのレプリケーション
+= 速度
 
-REINDEXは格納されているデータからインデックスを生成
+ヒット数が多くても検索性能が((*落ちない*))
 
-= PGroongaのレプリケーション
+= 速度
 
-データ量が多いほど時間がかかる
+((*安定して*))速い
 
-= PGroongaのレプリケーション
+= 速度
 
-REINDEXが遅いせいで復旧も遅くなってしまう
+* ベンチマーク
+  * ((<URL:https://pgroonga.github.io/ja/reference/pgroonga-versus-pg-bigm.html>))
 
-= PGroongaのレプリケーション
+= 今日のテーマ
 
-レプリケーションしている場合
-
-= PGroongaのレプリケーション
-
-ストリーミングレプリケーションによって、プライマリーのDBと同じものができている。
+PGroongaの\nレプリケーションを\n((*うまく*))使おう
 
 = PGroongaのレプリケーション
 
-系を切り替えた後にREINDEXが不要になる
+* 使うだけなら難しくない
+  * PostgreSQLのストリーミングレプリケーションと手順はほぼ同じ
+  * 手順もまとまっている
+    * ((<URL:https://pgroonga.github.io/ja/reference/streaming-replication.html>))
+
+= レプリケーションのメリット
+
+* PGroongaはインデックスサイズが大きい
+
+= レプリケーションのメリット
+
+* 予備系に切り替わった後にREINDEで復旧すると時間がかかる
+
+= レプリケーションのメリット
+
+* REINDEXは格納されているデータからインデックスを生成
+
+= レプリケーションのメリット
+
+* データ量が多いほど時間がかかる
+
+= レプリケーションのメリット
+
+* レプリケーションしていると、REINDEXせずに復旧できる
+
+= レプリケーションのメリット
+
+復旧時間を\n短縮できる
 
 = PGroongaのレプリケーション
 
-REINDEXしないので、復旧時間を短縮できる
+しかし
 
-= レプリケーションの注意点
+= PGroongaのレプリケーション
 
-ただ、PGroongaのレプリケーションはクラッシュセーフではない
+ただ使っている\nだけだと、\n((*困る*))ことがある
 
-= レプリケーションの注意点
+= PGroongaのレプリケーション
+
+例えば...
+
+* 現用系がクラッシュしたので、\n予備系に切り替えたらPGroongaのインデックスが破損
+  * PGroongaもレプリケーションしていたのに...
+
+= PGroongaのレプリケーション
+
+  # image
+  # src = images/broken-index.png
+  # relative_width = 90
+
+= PGroongaのレプリケーション
+
+例えば...
+
+* PGroongaのインデックスのファイルサイズが増加し続ける
+  * 定期的にVACUUMしているのに...
+
+= PGroongaのレプリケーション
+
+  # image
+  # src = images/increase-file-size.png
+  # relative_width = 90
+
+= PGroongaのレプリケーション
+
+なぜ
+
+* (1) インデックスが破損するのか？
+
+= インデックス破損の原因
+
+クラッシュセーフ((*じゃない*))から
+
+= インデックス破損の原因
 
 以下の処理中にクラッシュするとREINDEXでの復旧が必要
 
@@ -158,112 +195,109 @@ REINDEXしないので、復旧時間を短縮できる
 
 = レプリケーションの注意点
 
-PGroongaのインデックス更新中の破損を図で書く
+* PGroongaのインデックス更新中の破損を図で書く
 
 = レプリケーションの注意点
 
-削除済みのレコードに対する検索中の破損を図で書く
+* 削除済みのレコードに対する検索中の破損を図で書く
 
 = レプリケーションの注意点
 
-VACUUM実行中の破損を図で書く
+* VACUUM実行中の破損を図で書く
 
-= PGroongaのインデックスサイズ
+= レプリケーションの注意点
 
-PGroongaのインデックスは高速化のため、以下の情報を保持しているのでサイズが大きい
+なので
 
-* トークンの出現位置
-* PostgreSQLに保存しているインデックス対象のテキスト
+= レプリケーションの注意点
 
-= PGroongaのインデックスサイズ
+* 予備系に切り替わったときの状況によってはREINDEXが必要
 
-ある程度以上の規模のデータベースでは、ストレージ容量の圧迫の問題が出てくる
+= PGroongaのレプリケーション
 
-= PGroongaのインデックスサイズ
+なぜ
 
-定期的なVACCUMによって、不要なインデックスを削除し再利用可能な領域にする
+* (2) ファイルサイズが増加しつづけるのか？
 
-= PGroongaのインデックスサイズ
+= ファイルサイズ増加の原因
 
-定期的にVACUUMすることで、インデックスサイズは一定の範囲に収まる
+原因はPGroongaのWAL
 
-= PGroongaのインデックスサイズ
+= ファイルサイズ増加の原因
 
-定期的にVACUUMしていても、インデックスのサイズが増え続けることがある
+PGroongaのWALは削除しないと((*増え続ける*))
 
-= PGroongaのインデックスサイズ
+= ファイルサイズ増加の原因
 
-REINDEXしない限り増え続ける。。。
+つまり
 
-= PGroongaのインデックスサイズ
+= ファイルサイズ増加の原因
 
-原因はWAL
+(1) PGroongaのストリーミング機能を使っていて
+(2) 何もせずにずっと運用していると
 
-= PGroongaのインデックスサイズ
+= ファイルサイズ増加の原因
 
-PGroongaのWALは定期的に削除しないと増え続ける
-
-= PGroongaのインデックスサイズ
-
-PGroongaのストリーミング機能を使っていてREINDEXせずにずっと運用していると、
-PGroongaのインデックスサイズが増加し続けて、いずれストレージを満杯にする
+* ファイルサイズがどんどん増加し続けて\nいずれストレージを満杯にする
 
 = PGroongaのWALの運用方法
 
-PGroongaのWALは定期的なメンテナンスが必要
+なので
 
 = PGroongaのWALの運用方法
 
-メンテナンス方法は以下の2つ
-
-* REINDEXによるインデックス再構築
-* WALを定期的に削除
+PGroongaのWALは((*定期的なメンテナンス*))が必要
 
 = PGroongaのWALの運用方法
+
+ファイルサイズの増加を防ぐには？
+
+= PGroongaのWALの運用方法
+
+(1) REINDEXによるインデックス再構築
+(2) WALを定期的に削除
+
+= REINDEX
+
+* REINDEXすると、0から再生成
+* 古いインデックスは、VACUUM時に削除
+  * このときにWALも削除される
+
+= REINDEX
+
+ただ
+
+= REINDEX
 
 REINDEXによるインデックス再構築はデータ量が多いと時間がかかる
 
-= PGroongaのWALの運用方法
-
-大規模なデータベースでは、REINDEXは定期的に実行するのに向かない
-
-= PGroongaのWALの運用方法
-
-規模が小さければ、REINDEXは手軽に実行できるのでWALの削除より実行しやすい
-
-= PGroongaのWALの運用方法
-
-規模が大きい場合は、WALの定期的な削除がおすすめ
-
-= PGroongaのWALの運用方法
-
-PGroongaのWALは削除しても、そのスペースをOSに返さないので、ファイルサイズは減少しない
-
-= PGroongaのWALの運用方法
-
-増加しなくなるだけ
-
-= PGroongaのWALの運用方法
+= WALの定期的な削除
 
 PGroongaのWALのを削除するには、 pgroonga_wal_trancate を使う
 
-= PGroongaのWALの運用方法
+= WALの定期的な削除
+
+↓のようにすればWALを削除できる
 
   # coderay sql
 
     SELECT pgroonga_wal_truncate('インデックス名');
 
+= WALの定期的な削除
+
+しかし
+
+= WALの定期的な削除
+
+ただ、単純に削除すると、未適用のWALまで削除してしまう可能性がある
+
 = PGroongaのWALの運用方法
 
-ただ、単純に削除すると、未適用のWALのまで削除してしまう可能性がある
+削除前に、確実なWALの適用が必要
 
 = PGroongaのWALの運用方法
 
-削除する前に、確実にWALを適用させておく必要がある
-
-= PGroongaのWALの運用方法
-
-WALを適用するには、 pgroonga_wal_apply を使う
+明示的なWALの適用は、 pgroonga_wal_apply を使う
 
 = PGroongaのWALの運用方法
 
@@ -273,37 +307,113 @@ WALを適用するには、 pgroonga_wal_apply を使う
 
 = PGroongaのWALの運用方法
 
-削除手順
-
-* プライマリーのDBで対象のテーブルをロック
-* すべてのセカンダリーのDB程度でWALを適用
-* プライマリーのDB程度でWALを削除
-* テーブルのロックを解除
+まとめると
 
 = PGroongaのWALの運用方法
 
-プライマリーのDBで対象のテーブルをロックの図
+(1) プライマリーのDBで対象のテーブルをロック
+(2) すべてのセカンダリーのDB程度でWALを適用
+(3) プライマリーのDB程度でWALを削除
+(4) テーブルのロックを解除
 
 = PGroongaのWALの運用方法
 
-すべてのセカンダリーのDB程度でWALを適用の図
+* プライマリーのDBで対象のテーブルをロックの図
 
 = PGroongaのWALの運用方法
 
-プライマリーのDB程度でWALを削除の図
+* すべてのセカンダリーのDB程度でWALを適用の図
 
 = PGroongaのWALの運用方法
 
-テーブルのロックを解除の図
+* プライマリーのDBでWALを削除の図
 
+= PGroongaのWALの運用方法
 
+* テーブルのロックを解除の図
 
+= メンテナンス方法の選択
 
+(1) REINDEXによるインデックス再構築
+(2) WALを定期的に削除
 
+のどちらが良いのか？
 
+= メンテナンス方法の選択
 
+* REINDEX
+  * 時間がかかる
+  * REINDEX中は検索、更新がブロックされる
+  * 実行コマンドは少なく実行は手間ではない
 
+= メンテナンス方法の選択
 
+* WALの定期的な削除
+  * テーブルをロックしないといけない
+  * すべての待機系でWALを適用しないといけない
+  * REINDEXと比較して時間はかからない
 
+= メンテナンス方法の選択
 
+* サービスを継続したままインデックスを再構築するという方法もある
 
+= メンテナンス方法の選択
+
+* CREATE INDEX CONCURRENTLY を使う
+
+= メンテナンス方法の選択
+
+ただ
+
+= メンテナンス方法の選択
+
+* この方法は
+
+  (1) インデックスの構築にかなり時間がかかる
+  (2) インデックス構築中はパフォーマンスが低下する
+
+= メンテナンス方法の選択
+
+* 長時間パフィーマンスが低下した状態が続くのでおすすめしない。
+
+= メンテナンス方法の選択
+
+* 長時間のサービスの停止時間が許容できるならREINDEX
+  * 例えば夜間に実行するなど
+
+= メンテナンス方法の選択
+
+* DBの規模が小さいならREINDEX
+
+= メンテナンス方法の選択
+
+* 長時間のサービス停止が難しいならWALの削除
+
+= まとめ
+
+* PGroongaのレプリケーションでは以下の2点に注意して使う
+
+  * クラッシュセーフではない
+  * WALの定期的な削除が必要
+
+= まとめ
+
+PGroongaの\nレプリケーションを\n((*うまく*))使うことができました！！
+
+= 最後に
+
+* PGroongaについての疑問等は、GitHub、Gitterにて
+* ドキュメントも充実
+  * ((<"https://pgroonga.github.io/ja/"|URL:https://pgroonga.github.io/ja/>))
+
+= 最後に
+
+より突っ込んだお話がしたい場合は↓↓\n
+問い合わせ先：
+
+(('tag:x-small'))
+((<"https://www.clear-code.com/contact/?type=groonga"|URL:https://www.clear-code.com/contact/?type=groonga>))
+
+= 最後に
+
+ご静聴ありがとうございました
