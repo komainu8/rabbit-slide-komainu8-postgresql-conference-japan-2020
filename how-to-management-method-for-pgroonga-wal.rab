@@ -25,25 +25,39 @@
   # src = images/self-introduction.png
   # relative_height = 107
 
-= 今日のテーマ
+= 今日の話題
 
-PGroongaの\nレプリケーションを\n((*うまく*))使おう
-
-= PGroongaの紹介
-
-...の前に
+PGroongaの\nWALを\n((*うまく*))使おう
 
 = PGroongaの紹介
 
-そもそも、PGroongaとは？
+本題の前に
+
+= PGroongaの紹介
+
+PGroongaの紹介をします
 
 = PGroongaとは？
 
 PostgreSQL経由で\n((*高速な全文検索*))ができる拡張
 
+= PGroongaとは？
+
+((*簡単*))に使えて((*速い*))
+
+= PGroongaとは？
+
+PostgreSQL13にも対応！
+
+= PGroongaとは？
+
+B-treeやGINと同じように使える
+
 = 使い方(インデックス設定)
 
-↓のように使う
+まず、インデックスを設定
+
+= 使い方(インデックス設定)
 
   # coderay sql
 
@@ -55,6 +69,10 @@ PostgreSQL経由で\n((*高速な全文検索*))ができる拡張
   CREATE INDEX pgroonga_content_index
   ON memos
   USING pgroonga (content);
+
+= 使い方(全文検索)
+
+次は検索
 
 = 使い方(全文検索)
 
@@ -74,12 +92,7 @@ PostgreSQL経由で\n((*高速な全文検索*))ができる拡張
 
 = 使い方
 
-((*簡単！*))\n
-B-treeやGINと同じように使える
-
-= 速度
-
-((*超*))速い
+((*簡単*))ですね！
 
 = 速度
 
@@ -106,31 +119,73 @@ B-treeやGINと同じように使える
 * ベンチマーク
   * ((<URL:https://pgroonga.github.io/ja/reference/pgroonga-versus-pg-bigm.html>))
 
+= PGroongaの紹介
+
+以上、PGroongaの紹介でした
+
 = 今日のテーマ
 
-PGroongaの\nレプリケーションを\n((*うまく*))使おう
+本題に入ります
 
-= PGroongaのレプリケーション
+= 今日のテーマ
+
+PGroongaの\nWALを\n((*うまく*))使おう
+
+= WALとは
+
+Write Ahead Log\n
+ログ先行\n書き込み
+
+= WALとは
+
+  # image
+  # src = images/WAL1.png
+  # relative_width = 70
+
+= WALの使い方
+
+* クラッシュリカバリーの図を入れる
+
+= WALの使い方
+
+* ポイント・イン・タイム・リカバリの図を入れる
+
+= WALの使い方
+
+* ストリーミングレプリケーションの図を入れる
+
+= PGroongaのWAL
 
 * 使うだけなら難しくない
-  * PostgreSQLのストリーミングレプリケーションと手順はほぼ同じ
-  * 手順もまとまっている
-    * ((<URL:https://pgroonga.github.io/ja/reference/streaming-replication.html>))
+  * pgroonga.enable_wal を on にするだけ
 
-= レプリケーションのメリット
+= PGroongaのWAL
 
-* PGroongaはインデックスサイズが大きい
+* PostgreSQLのWALと同じように復旧に使える
 
-= レプリケーションのメリット
+= PGroongaのWAL
 
-* 予備系に切り替わった後にREINDEで復旧すると時間がかかる
+* ただし
 
-= レプリケーションのメリット
+= PGroongaのWAL
+
+* ベースバックアップ取得時にPGroongaのインデックスが確実にディスク上に書き出されるように取得すること
+
+= PGroongaのインデックス
+
+インデックスサイズが大きい
+
+= PGroongaのインデックス
+
+REINDEXで復旧すると時間がかかる
+
+= PGroongaのインデックス
+
+なぜ大きいのか？
+
+= PGroongaのインデックス
 
 * REINDEXは格納されているデータからインデックスを生成
-
-= レプリケーションのメリット
-
 * データ量が多いほど時間がかかる
 
 = レプリケーションのメリット
@@ -143,6 +198,10 @@ PGroongaの\nレプリケーションを\n((*うまく*))使おう
 
 = PGroongaのレプリケーション
 
+PGroongaもレプリケーションが使える
+
+= PGroongaのレプリケーション
+
 しかし
 
 = PGroongaのレプリケーション
@@ -150,21 +209,6 @@ PGroongaの\nレプリケーションを\n((*うまく*))使おう
 ただ使っている\nだけだと、\n((*困る*))ことがある
 
 = PGroongaのレプリケーション
-
-例えば...
-
-* 現用系がクラッシュしたので、\n予備系に切り替えたらPGroongaのインデックスが破損
-  * PGroongaもレプリケーションしていたのに...
-
-= PGroongaのレプリケーション
-
-  # image
-  # src = images/broken-index.png
-  # relative_width = 90
-
-= PGroongaのレプリケーション
-
-例えば...
 
 * PGroongaのインデックスのファイルサイズが増加し続ける
   * 定期的にVACUUMしているのに...
@@ -177,47 +221,7 @@ PGroongaの\nレプリケーションを\n((*うまく*))使おう
 
 = PGroongaのレプリケーション
 
-なぜ
-
-* (1) インデックスが破損するのか？
-
-= インデックス破損の原因
-
-クラッシュセーフ((*じゃない*))から
-
-= インデックス破損の原因
-
-以下の処理中にクラッシュするとREINDEXでの復旧が必要
-
-* PGroongaのインデックス更新中
-* 削除済みのレコードに対する検索中
-* VACUUM実行中
-
-= レプリケーションの注意点
-
-* PGroongaのインデックス更新中の破損を図で書く
-
-= レプリケーションの注意点
-
-* 削除済みのレコードに対する検索中の破損を図で書く
-
-= レプリケーションの注意点
-
-* VACUUM実行中の破損を図で書く
-
-= レプリケーションの注意点
-
-なので
-
-= レプリケーションの注意点
-
-* 予備系に切り替わったときの状況によってはREINDEXが必要
-
-= PGroongaのレプリケーション
-
-なぜ
-
-* (2) ファイルサイズが増加しつづけるのか？
+なぜ？
 
 = ファイルサイズ増加の原因
 
@@ -233,12 +237,12 @@ PGroongaのWALは削除しないと((*増え続ける*))
 
 = ファイルサイズ増加の原因
 
-(1) PGroongaのストリーミング機能を使っていて
+(1) PGroongaのWALを有効にしていて
 (2) 何もせずにずっと運用していると
 
 = ファイルサイズ増加の原因
 
-* ファイルサイズがどんどん増加し続けて\nいずれストレージを満杯にする
+* ファイルサイズがどんどん増加し続けて\nいずれストレージを食いつぶす。。。
 
 = PGroongaのWALの運用方法
 
@@ -259,7 +263,7 @@ PGroongaのWALは((*定期的なメンテナンス*))が必要
 
 = REINDEX
 
-* REINDEXすると、0から再生成
+* REINDEXすると、インデックスを0から再生成
 * 古いインデックスは、VACUUM時に削除
   * このときにWALも削除される
 
@@ -273,7 +277,7 @@ REINDEXによるインデックス再構築はデータ量が多いと時間が�
 
 = WALの定期的な削除
 
-PGroongaのWALのを削除するには、 pgroonga_wal_trancate を使う
+PGroongaのWALのを削除するには、 pgroonga_wal_truncate を使う
 
 = WALの定期的な削除
 
@@ -312,25 +316,13 @@ PGroongaのWALのを削除するには、 pgroonga_wal_trancate を使う
 = PGroongaのWALの運用方法
 
 (1) プライマリーのDBで対象のテーブルをロック
-(2) すべてのセカンダリーのDB程度でWALを適用
-(3) プライマリーのDB程度でWALを削除
+(2) すべてのセカンダリーのDBでWALを適用
+(3) プライマリーのDBでWALを削除
 (4) テーブルのロックを解除
 
 = PGroongaのWALの運用方法
 
-* プライマリーのDBで対象のテーブルをロックの図
-
-= PGroongaのWALの運用方法
-
-* すべてのセカンダリーのDB程度でWALを適用の図
-
-= PGroongaのWALの運用方法
-
-* プライマリーのDBでWALを削除の図
-
-= PGroongaのWALの運用方法
-
-* テーブルのロックを解除の図
+* 1ー4の図を書く
 
 = メンテナンス方法の選択
 
@@ -359,7 +351,8 @@ PGroongaのWALのを削除するには、 pgroonga_wal_trancate を使う
 
 = メンテナンス方法の選択
 
-* CREATE INDEX CONCURRENTLY を使う
+* REINDEX CONCURRENTLY を使う
+  * PostgreSQL 12 以降
 
 = メンテナンス方法の選択
 
@@ -374,7 +367,7 @@ PGroongaのWALのを削除するには、 pgroonga_wal_trancate を使う
 
 = メンテナンス方法の選択
 
-* 長時間パフィーマンスが低下した状態が続くのでおすすめしない。
+* 長時間パフォーマンスが低下した状態が続くのでおすすめしない。
 
 = メンテナンス方法の選択
 
@@ -389,12 +382,22 @@ PGroongaのWALのを削除するには、 pgroonga_wal_trancate を使う
 
 * 長時間のサービス停止が難しいならWALの削除
 
-= まとめ
+= PostgreSQLのWAL
 
-* PGroongaのレプリケーションでは以下の2点に注意して使う
+* PostgreSQLのWALはこのような作業は必要ない。
 
-  * クラッシュセーフではない
-  * WALの定期的な削除が必要
+= PostgreSQLのWAL
+
+* PostgreSQLのWALのローテートの仕組みを書く
+
+= PostgreSQLのWAL
+
+* PGroongaには、PostgreSQLと同程度の機能はまだない。
+
+= PostgreSQLのWAL
+
+* 今後の拡張案としてPostgreSQL本体みたいな機能を追加するというのがある
+* すぐに欲しい人はサポートを買って依頼
 
 = まとめ
 
@@ -412,8 +415,4 @@ PGroongaの\nレプリケーションを\n((*うまく*))使うことができ�
 問い合わせ先：
 
 (('tag:x-small'))
-((<"https://www.clear-code.com/contact/?type=groonga"|URL:https://www.clear-code.com/contact/?type=groonga>))
-
-= 最後に
-
-ご静聴ありがとうございました
+((<"https://www.clear-code.com/contact/"|URL:https://www.clear-code.com/contact/>))
