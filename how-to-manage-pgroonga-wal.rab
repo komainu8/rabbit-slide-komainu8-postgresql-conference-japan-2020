@@ -35,27 +35,32 @@ PGroongaの\nWALを\n((*うまく*))使おう
 
 = PGroongaの紹介
 
+(詳しくない人向けに)\n
 PGroongaの紹介をします
 
 = PGroongaとは？
 
 PostgreSQL経由で\n((*高速な全文検索*))ができる拡張
 
-= PGroongaとは？
+= PGroongaの特徴
 
 ((*簡単*))に使えて((*速い*))
 
-= PGroongaとは？
+= PGroongaの特徴
+
+継続してメンテナンスされている
+
+= PGroongaの特徴
 
 PostgreSQL13にも対応！
 
-= PGroongaとは？
+= PGroongaの使い方
 
 B-treeやGINと同じように使える
 
-= 使い方(インデックス設定)
+= PGroongaの使い方
 
-まず、インデックスを設定
+インデックスの設定方法
 
 = 使い方(インデックス設定)
 
@@ -72,7 +77,7 @@ B-treeやGINと同じように使える
 
 = 使い方(全文検索)
 
-次は検索
+全文検索の実行
 
 = 使い方(全文検索)
 
@@ -100,6 +105,10 @@ B-treeやGINと同じように使える
 
 = 速度
 
+つまり
+
+= 速度
+
 検索可能になるのが((*速い*))
 
 = 速度
@@ -109,6 +118,10 @@ B-treeやGINと同じように使える
 = 速度
 
 ヒット数が多くても検索性能が((*落ちない*))
+
+= 速度
+
+つまり
 
 = 速度
 
@@ -144,15 +157,15 @@ Write Ahead Log\n
 
 = WALの使い方
 
-* クラッシュリカバリーの図を入れる
+  # image
+  # src = images/crush-recovery.png
+  # relative_width = 70
 
 = WALの使い方
 
-* ポイント・イン・タイム・リカバリの図を入れる
-
-= WALの使い方
-
-* ストリーミングレプリケーションの図を入れる
+  # image
+  # src = images/streaming-replication.png
+  # relative_width = 70
 
 = PGroongaのWAL
 
