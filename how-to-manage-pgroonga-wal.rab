@@ -35,8 +35,8 @@ PGroongaの\nWALを\n((*うまく*))使おう
 
 = PGroongaの紹介
 
-(詳しくない人向けに)\n
-PGroongaの紹介をします
+PGroongaの紹介\n
+(詳しくない人\n向け)
 
 = PGroongaとは？
 
@@ -44,11 +44,11 @@ PostgreSQL経由で\n((*高速な全文検索*))ができる拡張
 
 = PGroongaの特徴
 
-((*簡単*))に使えて((*速い*))
+((*簡単*))に使えて\n((*速い*))
 
 = PGroongaの特徴
 
-継続してメンテナンスされている
+((*継続*))してメンテナンスされている
 
 = PGroongaの特徴
 
@@ -56,11 +56,15 @@ PostgreSQL13にも対応！
 
 = PGroongaの使い方
 
+使い方
+
+= PGroongaの使い方
+
 B-treeやGINと同じように使える
 
 = PGroongaの使い方
 
-インデックスの設定方法
+インデックスの\n設定方法
 
 = 使い方(インデックス設定)
 
@@ -117,7 +121,7 @@ B-treeやGINと同じように使える
 
 = 速度
 
-ヒット数が多くても検索性能が((*落ちない*))
+ヒット数が多くても検索性能が\n((*落ちない*))
 
 = 速度
 
@@ -159,13 +163,13 @@ Write Ahead Log\n
 
   # image
   # src = images/crush-recovery.png
-  # relative_width = 70
+  # relative_width = 90
 
 = WALの使い方
 
   # image
   # src = images/streaming-replication.png
-  # relative_width = 70
+  # relative_width = 90
 
 = PGroongaのWAL
 
@@ -174,11 +178,11 @@ Write Ahead Log\n
 
 = PGroongaのWAL
 
-* PostgreSQLのWALと同じように復旧に使える
+PostgreSQLのWALと同じように復旧に使える
 
 = PGroongaのWAL
 
-* ただし
+ただし
 
 = PGroongaのWAL
 
@@ -242,7 +246,7 @@ PGroongaもレプリケーションが使える
 
 = ファイルサイズ増加の原因
 
-PGroongaのWALは削除しないと((*増え続ける*))
+PGroongaのWALは削除しないと\n((*増え続ける*))
 
 = ファイルサイズ増加の原因
 
