@@ -148,7 +148,7 @@ B-treeやGINと同じように使える
 
 PGroongaの\nWALを\n((*うまく*))使おう
 
-= WALとは
+= WALとは？
 
 Write Ahead Log\n
 ログ先行\n書き込み
@@ -158,6 +158,10 @@ Write Ahead Log\n
   # image
   # src = images/WAL1.png
   # relative_width = 70
+
+= WALの使い方
+
+どのように使うのか？
 
 = WALの使い方
 
@@ -173,6 +177,26 @@ Write Ahead Log\n
 
 = PGroongaのWAL
 
+PGroongaのインデックスもWALが使える
+
+= PGroongaのWAL
+
+WALがない場合は、REINDEXでインデックスを再構築して復旧する
+
+= PGroongaのWAL
+
+ただ、PGroongaはインデックスサイズが大きい
+
+= PGroongaのWAL
+
+インデックス対象のデータが増えてくるとREINDEXに時間かかる
+
+= PGroongaのWAL
+
+WALから復旧することで、復旧時間を短縮できる
+
+= PGroongaのWAL
+
 * 使うだけなら難しくない
   * pgroonga.enable_wal を on にするだけ
 
@@ -180,36 +204,7 @@ Write Ahead Log\n
 
 PostgreSQLのWALと同じように復旧に使える
 
-= PGroongaのWAL
-
-ただし
-
-= PGroongaのWAL
-
-* ベースバックアップ取得時にPGroongaのインデックスが確実にディスク上に書き出されるように取得すること
-
-= PGroongaのインデックス
-
-インデックスサイズが大きい
-
-= PGroongaのインデックス
-
-REINDEXで復旧すると時間がかかる
-
-= PGroongaのインデックス
-
-なぜ大きいのか？
-
-= PGroongaのインデックス
-
-* REINDEXは格納されているデータからインデックスを生成
-* データ量が多いほど時間がかかる
-
-= レプリケーションのメリット
-
-* レプリケーションしていると、REINDEXせずに復旧できる
-
-= レプリケーションのメリット
+= WALのメリット
 
 復旧時間を\n短縮できる
 
@@ -225,7 +220,53 @@ PGroongaもレプリケーションが使える
 
 ただ使っている\nだけだと、\n((*困る*))ことがある
 
-= PGroongaのレプリケーション
+= PGroongaのWALの注意点
+
+例えば
+* ベースバックアップ取得時にPGroongaのインデックスが確実にディスク上に書き出されるように取得すること
+
+= PGroongaのWALの注意点
+
+なぜ？
+
+= PGroongaのWALの注意点
+
+PGroongaは内部にはGroongaのDBを持っている。
+このGroongaのDBの内容がディスク上に反映されていない状態だと、WALにもその情報は入らない。
+
+= PGroongaのWALの注意点
+
+なので
+
+= PGroongaのWALの注意点
+
+GroongaのDBの内容を確実にディスク上に書き込んでおくのが安全
+io_flushでできる。
+
+= PGroongaのWALの注意点
+
+例えば
+* クラッシュセーフではないので、PGroongaのインデックス更新中にクラッシュした場合はWALから復旧できないことがある。
+
+= PGroongaのWALの注意点
+
+なぜ？
+
+= PGroongaのWALの注意点
+
+インデックス更新中にクラッシュすると、PGroongaの内部で動作しているGroongaのDBにロックが残留していることがあるので、その状態だと、復旧できない。
+
+= PGroongaのWALの注意点
+
+なので
+
+= PGroongaのWALの注意点
+
+このケースだとWALは使えないので、REINDEXでインデックスを再構築する必要がある。
+
+= PGroongaのWALの注意点
+
+例えば
 
 * PGroongaのインデックスのファイルサイズが増加し続ける
   * 定期的にVACUUMしているのに...
@@ -405,7 +446,7 @@ PGroongaのWALのを削除するには、 pgroonga_wal_truncate を使う
 
 = PostgreSQLのWAL
 
-* PostgreSQLのWALのローテートの仕組みを書く
+* PostgreSQLはmax_wal_sizeとレプリケーションしている場合はwal_keep_segmentsというパラメータでWALの最大サイズを制御している
 
 = PostgreSQLのWAL
 
@@ -418,7 +459,7 @@ PGroongaのWALのを削除するには、 pgroonga_wal_truncate を使う
 
 = まとめ
 
-PGroongaの\nレプリケーションを\n((*うまく*))使うことができました！！
+PGroongaの\nWALを\n((*うまく*))使うことができました！！
 
 = 最後に
 
