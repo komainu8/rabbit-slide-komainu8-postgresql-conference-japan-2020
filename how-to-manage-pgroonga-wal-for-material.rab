@@ -1,0 +1,215 @@
+= PGroonga運用技法
+
+ : subtitle
+    ~PGroongaのWALを\n放置していませんか？~
+ : author
+    堀本泰弘
+ : institution
+    クリアコード
+ : content-source
+    PostgreSQL Conference Japan 2020
+ : date
+    2020-11-13
+ : allotted-time
+    45m
+ : start-time
+    2020-11-13T16:10:00+09:00
+ : end-time
+    2020-11-13T16:55:00+09:00
+ : theme
+    .
+
+= 自己紹介
+
+  # image
+  # src = images/self-introduction.png
+  # relative_height = 107
+
+= 今日のテーマ
+
+PGroongaの\nWALを\n((*うまく*))使おう
+
+= PGroongaのWAL
+
+PGroongaのWALは\n
+復旧時に使用する
+
+= PGroongaのWAL
+
+なぜWALのを使うのか？
+
+= PGroongaのWAL
+
+PGroongaは\n
+インデックス\n
+サイズが((*大きい*))
+
+= PGroongaのWAL
+
+WALがない場合\n
+REINDEXで復旧
+
+= PGroongaのWAL
+
+データ量が多いと\n
+REINDEXに時間かかる
+
+= PGroongaのWAL
+
+復旧が長引く
+
+= PGroongaのWAL
+
+WALを使って\n
+復旧時間を短縮
+
+= PGroongaのWAL
+
+使うだけなら以下を postgresql.conf に書くだけ
+
+  pgroonga.enable_wal = on
+
+= PGroongaのレプリケーション
+
+ただ使っている\nだけだと、\n((*困る*))ことがある
+
+= PGroongaのWALの注意点
+
+例えば
+
+* PGroongaのインデックスのファイルサイズが増加し続ける
+  * 定期的にVACUUMしているのに...
+
+= PGroongaのレプリケーション
+
+  # image
+  # src = images/increase-file-size.png
+  # relative_width = 90
+
+= ファイルサイズ増加の原因
+
+原因は\n((*PGroongaのWAL*))
+
+= ファイルサイズ増加の原因
+
+PGroongaのWALは削除しないと\n((*増え続ける*))
+
+= ファイルサイズ増加の原因
+
+(1) PGroongaの((*WALが有効*))
+(2) ((*何もせず*))に((*ずっと*))運用
+
+= ファイルサイズ増加の原因
+
+  # image
+  # src = images/index-increase.png
+  # relative_width = 100
+
+= PGroongaのWALの運用方法
+
+ファイルサイズの増加を防ぐには？
+
+= PGroongaのWALの運用方法
+
+((*定期的な*))\nメンテナンス
+
+= PGroongaのWALの運用方法
+
+(1) REINDEXによるインデックス再構築
+(2) WALを定期的に削除
+
+= REINDEX
+
+* REINDEXすると、インデックスを0から再生成
+* 古いインデックスは、VACUUM時に削除
+  * このときにWALも削除される
+
+= REINDEX
+
+REINDEXは\n時間がかかる
+
+= WALの定期的な削除
+
+  pgroonga_wal_truncate
+
+= WALの定期的な削除
+
+以下のように使う
+
+  # coderay sql
+
+    SELECT pgroonga_wal_truncate('インデックス名');
+
+= WALの定期的な削除
+
+未適用のWALを削除しないように注意
+
+= PGroongaのWALの運用方法
+
+削除前に確実なWALの適用が\n必要
+
+= PGroongaのWALの運用方法
+
+  pgroonga_wal_apply
+
+= PGroongaのWALの運用方法
+
+以下のように使う
+
+  # coderay sql
+
+    SELECT pgroonga_wal_apply('インデックス名');
+
+= メンテナンス方法の選択
+
+(1) REINDEXによるインデックス再構築
+(2) WALを定期的に削除
+
+のどちらが良いのか？
+
+= メンテナンス方法の選択
+
+* REINDEX
+  * 時間がかかる
+  * REINDEX中は検索、更新がブロック
+  * 実行は手間ではない
+
+= メンテナンス方法の選択
+
+* WALの定期的な削除
+  * REINDEXと比較して時間はかからない
+  * テーブルのロックが必要
+  * (レプリケーションしている場合は)\nすべての待機系でWALの適用が必要
+
+= メンテナンス方法の選択
+
+復旧にかかる時間をどれくらい許容できるか？
+
+= メンテナンス方法の選択
+
+例えば、以下のようなケースなら\n
+REINDEが手間がかからなくて良い
+
+(1) 夜間はサービス提供しない
+(2) REINDEX実行が夜間で完了
+
+= メンテナンス方法の選択
+
+例えば、以下のようなケースなら\n
+WALの削除を選択
+
+(1) 長時間のサービス停止が難しい
+
+= 最後に
+
+* PGroongaについての疑問等は、GitHub、Gitterでも受付
+* ドキュメントも充実
+  * ((<"https://pgroonga.github.io/ja/"|URL:https://pgroonga.github.io/ja/>))
+
+= 最後に
+
+より突っ込んだお話がしたい場合は↓↓\n
+問い合わせ先：
+
+(('tag:x-small'))
+((<"https://www.clear-code.com/contact/"|URL:https://www.clear-code.com/contact/>))
