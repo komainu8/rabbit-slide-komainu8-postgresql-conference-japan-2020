@@ -25,48 +25,33 @@
   # src = images/self-introduction.png
   # relative_height = 107
 
-= 今日の話題
+= 今日のテーマ
 
 PGroongaの\nWALを\n((*うまく*))使おう
 
 = PGroongaの紹介
 
-本題の前に
+の前に...
 
 = PGroongaの紹介
 
-PGroongaの紹介\n
-(詳しくない人\n向け)
+(知らない人向け)\n
+PGroonga紹介
 
-= PGroongaとは？
+= PGroongaの紹介
 
-PostgreSQL経由で\n((*高速な全文検索*))ができる拡張
+PGroongaとは？
 
-= PGroongaの特徴
+= PGroongaの紹介
 
-((*簡単*))に使えて\n((*速い*))
-
-= PGroongaの特徴
-
-((*継続*))してメンテナンスされている
+PostgreSQL経由で\n((*高速な全文検索*))
 
 = PGroongaの特徴
 
-PostgreSQL13にも対応！
+(1) ((*簡単*))に使える
+(2) ((*速い*))
 
 = PGroongaの使い方
-
-使い方
-
-= PGroongaの使い方
-
-B-treeやGINと同じように使える
-
-= PGroongaの使い方
-
-インデックスの\n設定方法
-
-= 使い方(インデックス設定)
 
   # coderay sql
 
@@ -79,62 +64,87 @@ B-treeやGINと同じように使える
   ON memos
   USING pgroonga (content);
 
-= 使い方(全文検索)
+= PGroongaの使い方
 
-全文検索の実行
+準備完了
 
-= 使い方(全文検索)
+= PGroongaの使い方
+
+データを入れて\n検索してみよう！
+
+= PGroongaの使い方
 
   # coderay sql
 
   INSERT INTO memos
-  VALUES (1, 'PostgreSQLはリレーショナル・データベース管理システムです。');
+  VALUES (1,
+          'PostgreSQLはリレーショナル・データベース管理システムです。');
 
   INSERT INTO memos
-  VALUES (2, 'Groongaは日本語対応の高速な全文検索エンジンです。');
+  VALUES (2,
+          'Groongaは日本語対応の高速な全文検索エンジンです。');
 
-  SELECT * FROM memos WHERE content &@ '全文検索';
+= PGroongaの使い方
+
+  # coderay sql
+
+  SELECT *
+    FROM memos
+    WHERE content &@ '全文検索';
+
   --  id |                      content                      
   -- ----+---------------------------------------------------
   --   2 | Groongaは日本語対応の高速な全文検索エンジンです。
   -- (1 row)
 
-= 使い方
+= PGroongaの使い方
 
 ((*簡単*))ですね！
 
-= 速度
+= PGroongaの速度
 
 追加されたデータは((*即時*))検索可能
 
-= 速度
+= PGroongaの速度
 
 つまり
 
-= 速度
+= PGroongaの速度
 
 検索可能になるのが((*速い*))
 
-= 速度
+= PGroongaの速度
 
 更新中も検索性能が((*落ちない*))
 
-= 速度
+= PGroongaの速度
 
 ヒット数が多くても検索性能が\n((*落ちない*))
 
-= 速度
+= PGroongaの速度
 
 つまり
 
-= 速度
+= PGroongaの速度
 
 ((*安定して*))速い
 
-= 速度
+= PGroongaの速度
+
+もちろん\n検索も((*速い*))
+
+= PGroongaの速度
 
 * ベンチマーク
   * ((<URL:https://pgroonga.github.io/ja/reference/pgroonga-versus-pg-bigm.html>))
+
+= PGroongaの特徴
+
+((*継続*))してメンテナンスされている
+
+= PGroongaの特徴
+
+PostgreSQL13\nにも対応！
 
 = PGroongaの紹介
 
@@ -147,6 +157,10 @@ B-treeやGINと同じように使える
 = 今日のテーマ
 
 PGroongaの\nWALを\n((*うまく*))使おう
+
+= WALとは？
+
+WAL?
 
 = WALとは？
 
@@ -175,6 +189,10 @@ Write Ahead Log\n
   # src = images/streaming-replication.png
   # relative_width = 90
 
+= WALの使い方
+
+* ポイントインタイムリカバリーの図を入れる
+
 = PGroongaのWAL
 
 PGroongaのインデックスもWALが使える
@@ -202,17 +220,16 @@ WALから復旧することで、復旧時間を短縮できる
 
 = PGroongaのWAL
 
-PostgreSQLのWALと同じように復旧に使える
+* PostgreSQLのWALと同じように復旧に使える
+  * クラッシュリカバリー
+  * PITR
+  * レプリケーション
 
 = WALのメリット
 
 復旧時間を\n短縮できる
 
-= PGroongaのレプリケーション
-
-PGroongaもレプリケーションが使える
-
-= PGroongaのレプリケーション
+= PGroongaのWAL
 
 しかし
 
