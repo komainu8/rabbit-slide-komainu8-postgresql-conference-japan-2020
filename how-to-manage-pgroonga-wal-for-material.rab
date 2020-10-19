@@ -25,6 +25,122 @@
   # src = images/self-introduction.png
   # relative_height = 107
 
+= PGroongaの紹介
+
+PGroongaとは？
+
+= PGroongaの紹介
+
+PostgreSQL経由で\n((*高速な全文検索*))
+
+= PGroongaの特徴
+
+(1) ((*簡単*))に使える
+(2) ((*速い*))
+
+= PGroongaの使い方
+
+  # coderay sql
+
+  CREATE TABLE memos (
+    id integer,
+    content text
+  );
+
+  CREATE INDEX pgroonga_content_index
+  ON memos
+  USING pgroonga (content);
+
+= PGroongaの使い方
+
+準備完了
+
+= PGroongaの使い方
+
+データを入れて\n検索してみよう！
+
+= PGroongaの使い方
+
+  # coderay sql
+
+  INSERT INTO memos
+  VALUES (1,
+          'PostgreSQLはリレーショナル・データベース管理システムです。');
+
+  INSERT INTO memos
+  VALUES (2,
+          'Groongaは日本語対応の高速な全文検索エンジンです。');
+
+= PGroongaの使い方
+
+  # coderay sql
+
+  SELECT *
+    FROM memos
+    WHERE content &@ '全文検索';
+
+  --  id |                      content                      
+  -- ----+---------------------------------------------------
+  --   2 | Groongaは日本語対応の高速な全文検索エンジンです。
+  -- (1 row)
+
+= PGroongaの使い方
+
+((*簡単*))ですね！
+
+= PGroongaの速度
+
+追加されたデータは((*即時*))検索可能
+
+= PGroongaの速度
+
+つまり
+
+= PGroongaの速度
+
+検索可能になるのが((*速い*))
+
+= PGroongaの速度
+
+更新中も検索性能が((*落ちない*))
+
+= PGroongaの速度
+
+ヒット数が多くても検索性能が\n((*落ちない*))
+
+= PGroongaの速度
+
+つまり
+
+= PGroongaの速度
+
+((*安定して*))速い
+
+= PGroongaの速度
+
+もちろん\n検索も((*速い*))
+
+= PGroongaの速度
+
+* ベンチマーク
+  * ((<URL:https://pgroonga.github.io/ja/reference/pgroonga-versus-pg-bigm.html>))
+
+= PGroongaの特徴
+
+((*継続*))してメンテナンスされている
+
+= PGroongaの特徴
+
+PostgreSQL13\nにも対応済み！
+
+= 参考情報
+
+* PGroongaについてのより詳しい解説
+  * ((<URL:https://www.slideshare.net/kou/postgresql-conference-japan-2017>))
+
+* 公式ドキュメント
+  * ((<URL:https://pgroonga.github.io/ja/>))
+
 = 今日のテーマ
 
 PGroongaの\nWALを\n((*うまく*))使おう
