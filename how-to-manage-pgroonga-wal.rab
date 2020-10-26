@@ -160,10 +160,6 @@ PGroongaの\nWALを\n((*うまく*))使おう
 
 = WALとは？
 
-WAL?
-
-= WALとは？
-
 Write Ahead Log\n
 ログ先行\n書き込み
 
@@ -179,9 +175,17 @@ Write Ahead Log\n
 
 = WALの使い方
 
+クラッシュリカバリー
+
+= WALの使い方
+
   # image
   # src = images/crush-recovery.png
   # relative_width = 90
+
+= WALの使い方
+
+ストリーミングレプリケーション
 
 = WALの使い方
 
@@ -191,11 +195,19 @@ Write Ahead Log\n
 
 = WALの使い方
 
-* ポイントインタイムリカバリーの図を入れる
+ポイントインタイムリカバリー
+
+= WALの使い方
+
+ポイントインタイムリカバリーの図
 
 = PGroongaのWAL
 
 PGroongaのインデックスもWALが使える
+
+= PGroongaのWAL
+
+WALからインデックスも復元できる
 
 = PGroongaのWAL
 
