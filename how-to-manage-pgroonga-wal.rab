@@ -53,6 +53,10 @@ PostgreSQL経由で\n((*高速な全文検索*))
 
 = PGroongaの使い方
 
+実際に全文検索\nしてみましょう
+
+= PGroongaの使い方
+
   # coderay sql
 
   CREATE TABLE memos (
@@ -70,7 +74,7 @@ PostgreSQL経由で\n((*高速な全文検索*))
 
 = PGroongaの使い方
 
-データを入れて\n検索してみよう！
+データを入れて\n検索！
 
 = PGroongaの使い方
 
@@ -123,10 +127,7 @@ PostgreSQL経由で\n((*高速な全文検索*))
 
 = PGroongaの速度
 
-つまり
-
-= PGroongaの速度
-
+PGroongaは\n
 ((*安定して*))速い
 
 = PGroongaの速度
@@ -137,6 +138,10 @@ PostgreSQL経由で\n((*高速な全文検索*))
 
 * ベンチマーク
   * ((<URL:https://pgroonga.github.io/ja/reference/pgroonga-versus-pg-bigm.html>))
+
+= PGroongaの特徴
+
+さらに
 
 = PGroongaの特徴
 
@@ -171,11 +176,11 @@ Write Ahead Log\n
 
 = WALの使い方
 
-どのように使うのか？
+どのように\n使うのか？
 
 = WALの使い方
 
-クラッシュリカバリー
+クラッシュ\nリカバリー
 
 = WALの使い方
 
@@ -185,7 +190,7 @@ Write Ahead Log\n
 
 = WALの使い方
 
-ストリーミングレプリケーション
+ストリーミング\nレプリケーション
 
 = WALの使い方
 
@@ -195,7 +200,7 @@ Write Ahead Log\n
 
 = WALの使い方
 
-ポイントインタイムリカバリー
+ポイントイン\nタイムリカバリー
 
 = WALの使い方
 
@@ -203,23 +208,31 @@ Write Ahead Log\n
 
 = PGroongaのWAL
 
-PGroongaのインデックスもWALが使える
+PGroongaの\nインデックスもWALが使える
 
 = PGroongaのWAL
 
-WALからインデックスも復元できる
+WALから\nインデックスの\n復元ができる
 
 = PGroongaのWAL
 
-WALがない場合は、REINDEXでインデックスを再構築して復旧する
+WALから\n復元できると\n何が良いのか？
 
 = PGroongaのWAL
 
-ただ、PGroongaはインデックスサイズが大きい
+WALがない\n場合の復元
 
 = PGroongaのWAL
 
-インデックス対象のデータが増えてくるとREINDEXに時間かかる
+REINDEXを使う
+
+= PGroongaのWAL
+
+PGroongaは\nインデックス\nサイズが大きい
+
+= PGroongaのWAL
+
+インデックス対象のデータが大きいとREINDEXに時間かかる
 
 = PGroongaのWAL
 
@@ -228,7 +241,7 @@ WALから復旧することで、復旧時間を短縮できる
 = PGroongaのWAL
 
 * 使うだけなら難しくない
-  * pgroonga.enable_wal を on にするだけ
+  * pgroonga.enable_wal を true にするだけ
 
 = PGroongaのWAL
 
@@ -248,29 +261,6 @@ WALから復旧することで、復旧時間を短縮できる
 = PGroongaのレプリケーション
 
 ただ使っている\nだけだと、\n((*困る*))ことがある
-
-= PGroongaのWALの注意点
-
-例えば
-* ベースバックアップ取得時にPGroongaのインデックスが確実にディスク上に書き出されるように取得すること
-
-= PGroongaのWALの注意点
-
-なぜ？
-
-= PGroongaのWALの注意点
-
-PGroongaは内部にはGroongaのDBを持っている。
-このGroongaのDBの内容がディスク上に反映されていない状態だと、WALにもその情報は入らない。
-
-= PGroongaのWALの注意点
-
-なので
-
-= PGroongaのWALの注意点
-
-GroongaのDBの内容を確実にディスク上に書き込んでおくのが安全
-io_flushでできる。
 
 = PGroongaのWALの注意点
 
