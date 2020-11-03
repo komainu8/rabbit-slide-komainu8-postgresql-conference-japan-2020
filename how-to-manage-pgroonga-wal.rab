@@ -354,7 +354,7 @@ REINDEXによるインデックス再構築はデータ量が多いと時間が�
 
 = WALの定期的な削除
 
-PGroongaのWALのを削除するには、 pgroonga_wal_truncate を使う
+PGroongaのWALを削除するには、 pgroonga_wal_truncate を使う
 
 = WALの定期的な削除
 
