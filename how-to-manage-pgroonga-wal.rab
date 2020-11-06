@@ -53,6 +53,10 @@ PostgreSQL経由で\n((*高速な全文検索*))
 
 = PGroongaの使い方
 
+((*簡単*))に使える
+
+= PGroongaの使い方
+
 実際に全文検索\nしてみましょう
 
 = PGroongaの使い方
@@ -70,14 +74,6 @@ PostgreSQL経由で\n((*高速な全文検索*))
 
 = PGroongaの使い方
 
-準備完了
-
-= PGroongaの使い方
-
-データを入れて\n検索！
-
-= PGroongaの使い方
-
   # coderay sql
 
   INSERT INTO memos
@@ -87,6 +83,10 @@ PostgreSQL経由で\n((*高速な全文検索*))
   INSERT INTO memos
   VALUES (2,
           'Groongaは日本語対応の高速な全文検索エンジンです。');
+
+= PGroongaの使い方
+
+準備完了
 
 = PGroongaの使い方
 
@@ -104,6 +104,10 @@ PostgreSQL経由で\n((*高速な全文検索*))
 = PGroongaの使い方
 
 ((*簡単*))ですね！
+
+= PGroongaの速度
+
+((*速い*))
 
 = PGroongaの速度
 
@@ -166,7 +170,6 @@ PGroongaの\nWALを\n((*うまく*))使おう
 = WALとは？
 
 Write Ahead Log\n
-ログ先行\n書き込み
 
 = WALとは
 
