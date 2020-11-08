@@ -271,7 +271,7 @@ REINDEXは\n時間がかかる
 
 = PGroongaのWALの注意点
 
-WALが適用\nできないケース\nがある
+WALが適用\nできないケース
 
 = PGroongaのWALの注意点
 
@@ -281,7 +281,11 @@ WALが適用\nできないケース\nがある
 = PGroongaのWALの注意点
 
 * インデックス破損の状態では、WALを適用できない(ことがある)
-  * REINDEXを使って復元
+  * この場合はREINDEXを使って復元
+
+= PGroongaのWALの注意点
+
+定期的な\nメンテナンス
 
 = PGroongaのWALの注意点
 
@@ -291,6 +295,12 @@ WALが適用\nできないケース\nがある
 
   # image
   # src = images/increase-file-size.png
+  # relative_width = 90
+
+= PGroongaのレプリケーション
+
+  # image
+  # src = images/vaccum.png
   # relative_width = 90
 
 = PGroongaのレプリケーション
@@ -318,7 +328,7 @@ PGroongaのWALは削除しないと\n((*増え続ける*))
 
   # image
   # src = images/index-increase.png
-  # relative_width = 90
+  # relative_width = 100
 
 = PGroongaのWALの運用方法
 
@@ -326,7 +336,7 @@ PGroongaのWALは削除しないと\n((*増え続ける*))
 
 = PGroongaのWALの運用方法
 
-((*定期的なメンテナンス*))が必要
+((*定期的な\nメンテナンス*))\nが必要
 
 = PGroongaのWALの運用方法
 
@@ -345,19 +355,15 @@ PGroongaのWALは削除しないと\n((*増え続ける*))
 
 = REINDEX
 
-ただ
-
-= REINDEX
-
-REINDEXは時間がかかる
+  * 😞 時間がかかる
+  * 😞 REINDEX中は検索、更新がブロックされる
+  * 😃 手間は少ない
 
 = WALの定期的な削除
 
-PGroongaのWALを削除するには、 pgroonga_wal_truncate を使う
+* PGroongaのWALはSQLで削除\nできる
 
 = WALの定期的な削除
-
-↓のようにすればWALを削除できる
 
   # coderay sql
 
@@ -365,19 +371,24 @@ PGroongaのWALを削除するには、 pgroonga_wal_truncate を使う
 
 = WALの定期的な削除
 
-しかし
+  * 😞 手間がかかる
+    * テーブルのロックが必要
+      * データの更新ができない
+    * 明示的なWALの適用が必要
+  * 😃 REINDEXより短時間
 
 = WALの定期的な削除
 
-ただ、単純に削除すると、未適用のWALまで削除してしまう可能性がある
+* 明示的なWALの適用が必要
+  * 単純にWAL削除すると、未適用のWALまで削除してしまう可能性がある
 
 = PGroongaのWALの運用方法
 
-削除前に、確実なWALの適用が必要
+なので
 
 = PGroongaのWALの運用方法
 
-明示的なWALの適用は、 pgroonga_wal_apply を使う
+明示的にWALを適用する
 
 = PGroongaのWALの運用方法
 
@@ -387,18 +398,18 @@ PGroongaのWALを削除するには、 pgroonga_wal_truncate を使う
 
 = PGroongaのWALの運用方法
 
-まとめると
+ストリーミング\nレプリケーション\n構成の場合
 
 = PGroongaのWALの運用方法
 
-(1) プライマリーのDBで対象のテーブルをロック
-(2) すべてのセカンダリーのDBでWALを適用
-(3) プライマリーのDBでWALを削除
+((*全て*))の\nセカンダリーDBでWALを適用
+
+= PGroongaのWALの運用方法
+
+(1) プライマリーDBでテーブルをロック
+(2) 全てのセカンダリーDBでWALを適用
+(3) プライマリーDBでWALを削除
 (4) テーブルのロックを解除
-
-= PGroongaのWALの運用方法
-
-* 1ー4の図を書く
 
 = メンテナンス方法の選択
 
@@ -410,53 +421,43 @@ PGroongaのWALを削除するには、 pgroonga_wal_truncate を使う
 = メンテナンス方法の選択
 
 * REINDEX
-  * 時間がかかる
-  * REINDEX中は検索、更新がブロックされる
-  * 実行コマンドは少なく実行は手間ではない
+
+  * 😞 時間がかかる
+  * 😞 REINDEX中は検索、更新がブロックされる
+    * ブロックせずにREINDEXする方法もある
+  * 😃 手間は少ない
+
+= メンテナンス方法の選択
+
+* REINDEX CONCURRENTLY
+  * PostgreSQL 12 以降で使える
+
+= メンテナンス方法の選択
+
+* 😞 インデックスの構築にかなり時間がかかる
+* 😞 インデックス構築中は\nパフォーマンスが低下する
 
 = メンテナンス方法の選択
 
 * WALの定期的な削除
-  * テーブルをロックしないといけない
-  * すべての待機系でWALを適用しないといけない
-  * REINDEXと比較して時間はかからない
+  * 😞 手間がかかる
+    * テーブルのロックが必要
+      * データの更新ができない
+    * 明示的なWALの適用が必要
+  * 😃 REINDEXより短時間
 
 = メンテナンス方法の選択
 
-* サービスを継続したままインデックスを再構築するという方法もある
+* REINDEX向きのケース
+  * 長時間のサービス停止が許容できる
+    * 例えば夜間に実行するなど
+  * テーブルが小さい
 
 = メンテナンス方法の選択
 
-* REINDEX CONCURRENTLY を使う
-  * PostgreSQL 12 以降
-
-= メンテナンス方法の選択
-
-ただ
-
-= メンテナンス方法の選択
-
-* この方法は
-
-  (1) インデックスの構築にかなり時間がかかる
-  (2) インデックス構築中はパフォーマンスが低下する
-
-= メンテナンス方法の選択
-
-* 長時間パフォーマンスが低下した状態が続くのでおすすめしない。
-
-= メンテナンス方法の選択
-
-* 長時間のサービスの停止時間が許容できるならREINDEX
-  * 例えば夜間に実行するなど
-
-= メンテナンス方法の選択
-
-* DBの規模が小さいならREINDEX
-
-= メンテナンス方法の選択
-
-* 長時間のサービス停止が難しいならWALの削除
+* WALの削除向きのケース
+  * 長時間のサービス停止が難しい
+  * テーブルが大きい
 
 = PostgreSQLのWAL
 
@@ -464,7 +465,10 @@ PGroongaのWALを削除するには、 pgroonga_wal_truncate を使う
 
 = PostgreSQLのWAL
 
-* PostgreSQLはmax_wal_sizeとレプリケーションしている場合はwal_keep_segmentsというパラメータでWALの最大サイズを制御している
+* PostgreSQLはWALの最大サイズを制御できる
+  * max_wal_size
+  * wal_keep_segments
+* チェックポイント以前のログは\n再利用可能
 
 = PostgreSQLのWAL
 
@@ -472,8 +476,8 @@ PGroongaのWALを削除するには、 pgroonga_wal_truncate を使う
 
 = PostgreSQLのWAL
 
-* 今後の拡張案としてPostgreSQL本体みたいな機能を追加するというのがある
-* すぐに欲しい人はサポートを買って依頼
+* 今後、改善予定
+  * PostgreSQLと同じような仕組みを追加
 
 = まとめ
 
