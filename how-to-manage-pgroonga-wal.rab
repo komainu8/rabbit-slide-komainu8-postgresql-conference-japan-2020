@@ -57,6 +57,12 @@ PostgreSQL経由で\n((*高速な全文検索*))
 
 = PGroongaの使い方
 
+  # image
+  # src = images/pgroonga-sql.png
+  # relative_height = 107
+
+= PGroongaの使い方
+
 実際に全文検索\nしてみましょう
 
 = PGroongaの使い方
@@ -187,7 +193,9 @@ Write Ahead Log\n
 
 = WALの使い方
 
-ポイントインタイムリカバリーの図
+  # image
+  # src = images/pitr.png
+  # relative_width = 90
 
 = WALの使い方
 
@@ -221,18 +229,11 @@ WALがない\n場合の復元
 
 = PGroongaのWAL
 
-REINDEXで復元
+REINDEX
 
 = PGroongaのWAL
 
 REINDEXは\n時間がかかる
-
-= PGroongaのWAL
-
-特に\n
-PGroongaは\nインデックス\nサイズが大きい
-
-グラフ
 
 = PGroongaのWAL
 
@@ -247,49 +248,44 @@ PGroongaは\nインデックス\nサイズが大きい
 
   # coderay sql
 
-    SET pgroonga.enable_wal true
+    pgroonga.enable_wal = true
 
 = PGroongaのWAL
 
 * PostgreSQLのWALと同じように復旧に使える
-  * PITR
+  * ポイントインタイムリカバリー
   * ストリーミングレプリケーション
 
 = PGroongaのWAL
 
 しかし
 
-= PGroongaのレプリケーション
+= PGroongaのWAL
 
 ただ使っている\nだけだと、\n((*困る*))ことがある
 
 = PGroongaのWALの注意点
 
-例えば
-* クラッシュセーフではないので、PGroongaのインデックス更新中にクラッシュした場合はWALから復旧できないことがある。
+(1) WALが適用できないケース\nがある
+(2) 定期的なメンテナンスが必要
 
 = PGroongaのWALの注意点
 
-なぜ？
+WALが適用\nできないケース\nがある
 
 = PGroongaのWALの注意点
 
-インデックス更新中にクラッシュすると、PGroongaの内部で動作しているGroongaのDBにロックが残留していることがあるので、その状態だと、復旧できない。
+* クラッシュセーフ((*ではない*))
+  * インデックス更新中のクラッシュで\nインデックスが破損する(ことがある)
 
 = PGroongaのWALの注意点
 
-なので
+* インデックス破損の状態では、WALを適用できない(ことがある)
+  * REINDEXを使って復元
 
 = PGroongaのWALの注意点
 
-このケースだとWALは使えないので、REINDEXでインデックスを再構築する必要がある。
-
-= PGroongaのWALの注意点
-
-例えば
-
-* PGroongaのインデックスのファイルサイズが増加し続ける
-  * 定期的にVACUUMしているのに...
+* PGroongaのインデックスのファイルサイズが((*増加し続ける*))
 
 = PGroongaのレプリケーション
 
@@ -315,12 +311,14 @@ PGroongaのWALは削除しないと\n((*増え続ける*))
 
 = ファイルサイズ増加の原因
 
-(1) PGroongaのWALを有効にしていて
-(2) 何もせずにずっと運用していると
+(1) PGroongaのWALが有効
+(2) 何もせずにずっと運用している
 
 = ファイルサイズ増加の原因
 
-* ファイルサイズがどんどん増加し続けて\nいずれストレージを食いつぶす。。。
+  # image
+  # src = images/index-increase.png
+  # relative_width = 90
 
 = PGroongaのWALの運用方法
 
@@ -328,7 +326,7 @@ PGroongaのWALは削除しないと\n((*増え続ける*))
 
 = PGroongaのWALの運用方法
 
-PGroongaのWALは((*定期的なメンテナンス*))が必要
+((*定期的なメンテナンス*))が必要
 
 = PGroongaのWALの運用方法
 
@@ -351,7 +349,7 @@ PGroongaのWALは((*定期的なメンテナンス*))が必要
 
 = REINDEX
 
-REINDEXによるインデックス再構築はデータ量が多いと時間がかかる
+REINDEXは時間がかかる
 
 = WALの定期的な削除
 
