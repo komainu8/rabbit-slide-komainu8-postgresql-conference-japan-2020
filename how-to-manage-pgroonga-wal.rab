@@ -171,7 +171,7 @@ PGroongaの\nWALを\n((*うまく*))使おう
 
 Write Ahead Log\n
 
-= WALとは
+= WALとは？
 
   # image
   # src = images/WAL1.png
@@ -183,13 +183,11 @@ Write Ahead Log\n
 
 = WALの使い方
 
-クラッシュ\nリカバリー
+ポイントイン\nタイムリカバリー
 
 = WALの使い方
 
-  # image
-  # src = images/crush-recovery.png
-  # relative_width = 90
+ポイントインタイムリカバリーの図
 
 = WALの使い方
 
@@ -201,17 +199,9 @@ Write Ahead Log\n
   # src = images/streaming-replication.png
   # relative_width = 90
 
-= WALの使い方
-
-ポイントイン\nタイムリカバリー
-
-= WALの使い方
-
-ポイントインタイムリカバリーの図
-
 = PGroongaのWAL
 
-PGroongaの\nインデックスもWALが使える
+PGroongaも\nWALが使える
 
 = PGroongaのWAL
 
@@ -219,7 +209,11 @@ WALから\nインデックスの\n復元ができる
 
 = PGroongaのWAL
 
-WALから\n復元できると\n何が良いのか？
+メリット
+
+= PGroongaのWAL
+
+インデックスの\n復旧時間を短縮
 
 = PGroongaのWAL
 
@@ -227,35 +221,39 @@ WALがない\n場合の復元
 
 = PGroongaのWAL
 
-REINDEXを使う
+REINDEXで復元
 
 = PGroongaのWAL
 
+REINDEXは\n時間がかかる
+
+= PGroongaのWAL
+
+特に\n
 PGroongaは\nインデックス\nサイズが大きい
 
-= PGroongaのWAL
-
-インデックス対象のデータが大きいとREINDEXに時間かかる
+グラフ
 
 = PGroongaのWAL
 
-WALから復旧することで、復旧時間を短縮できる
+どうやって\n使うの？
 
 = PGroongaのWAL
 
-* 使うだけなら難しくない
-  * pgroonga.enable_wal を true にするだけ
+簡単です\n
+((*ただ使うだけ*))\nなら
+
+= PGroongaのWAL
+
+  # coderay sql
+
+    SET pgroonga.enable_wal true
 
 = PGroongaのWAL
 
 * PostgreSQLのWALと同じように復旧に使える
-  * クラッシュリカバリー
   * PITR
-  * レプリケーション
-
-= WALのメリット
-
-復旧時間を\n短縮できる
+  * ストリーミングレプリケーション
 
 = PGroongaのWAL
 
