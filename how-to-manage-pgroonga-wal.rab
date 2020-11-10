@@ -50,6 +50,7 @@ PostgreSQL経由で\n((*高速な全文検索*))
 
 (1) ((*簡単*))に使える
 (2) ((*速い*))
+(3) ((*全言語*))対応
 
 = PGroongaの使い方
 
@@ -65,47 +66,56 @@ PostgreSQL経由で\n((*高速な全文検索*))
 
 実際に全文検索\nしてみましょう
 
-= PGroongaの使い方
+= 実行例：テーブル定義
 
   # coderay sql
 
-  CREATE TABLE memos (
-    id integer,
+  CREATE TABLE entries (
+    title text,
     content text
   );
 
-  CREATE INDEX pgroonga_content_index
-  ON memos
-  USING pgroonga (content);
-
-= PGroongaの使い方
+= 実行例：\nインデックス定義
 
   # coderay sql
 
-  INSERT INTO memos
-  VALUES (1,
-          'PostgreSQLはリレーショナル・データベース管理システムです。');
+  -- 全文検索用インデックス
+  CREATE INDEX entries_full_text_search
+    ON entries
+    --「USING pgroonga」=「PGroongaを使う」
+    USING pgroonga (title, content);
 
-  INSERT INTO memos
-  VALUES (2,
-          'Groongaは日本語対応の高速な全文検索エンジンです。');
-
-= PGroongaの使い方
-
-準備完了
-
-= PGroongaの使い方
+= 実行例：データ挿入
 
   # coderay sql
 
-  SELECT *
-    FROM memos
-    WHERE content &@ '全文検索';
+  -- 普通に挿入するだけでよい
+  INSERT INTO entries
+    VALUES ('PGroongaで高速全文検索！',
+            '高速に全文検索したいですね！');
 
-  --  id |                      content                      
-  -- ----+---------------------------------------------------
-  --   2 | Groongaは日本語対応の高速な全文検索エンジンです。
-  -- (1 row)
+= 実行例：全文検索
+
+  # coderay sql
+
+  SELECT title FROM entries
+    WHERE
+  -- &@~で全文検索
+  -- 「検索」と「高速」をAND検索
+      title &@~ '検索 高速' OR
+      content &@~ '検索 高速';
+
+= 実行例：LIKE
+
+  # coderay sql
+
+  SELECT title FROM entries
+    WHERE
+  -- LIKEでもインデックスが効く
+  --＝アプリを書き換えずに高速化可能
+  -- ただし&@~より性能が落ちる
+      title LIKE '%検索%' OR
+      content LIKE '%検索%';
 
 = PGroongaの使い方
 
@@ -148,6 +158,10 @@ PGroongaは\n
 
 * ベンチマーク
   * ((<URL:https://pgroonga.github.io/ja/reference/pgroonga-versus-pg-bigm.html>))
+
+= PGroongaの特徴
+
+((*全言語*))対応
 
 = PGroongaの特徴
 
