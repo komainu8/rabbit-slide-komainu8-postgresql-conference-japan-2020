@@ -1,6 +1,6 @@
 ---
 id: postgresql-conference-japan-2020
-base_name: how-to-management-method-for-pgroonga-wal
+base_name: how-to-manage-pgroonga-wal
 tags:
 - rabbit
 - postgresql
