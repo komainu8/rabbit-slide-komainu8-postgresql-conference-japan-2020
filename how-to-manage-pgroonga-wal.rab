@@ -197,6 +197,18 @@ Write Ahead Log\n
   # src = images/WAL1.png
   # relative_width = 70
 
+= WALとは？
+
+  # image
+  # src = images/WAL2.png
+  # relative_width = 90
+
+= WALとは？
+
+  # image
+  # src = images/WAL3.png
+  # relative_width = 90
+
 = WALの使い方
 
 どのように\n使うのか？
@@ -239,7 +251,15 @@ WALから\nインデックスの\n復元ができる
 
 = PGroongaのWAL
 
-WALがない\n場合の復元
+  # image
+  # src = images/pgroonga-wal1.png
+  # relative_width = 90
+
+= PGroongaのWAL
+
+  # image
+  # src = images/without-pgroonga-wal.png
+  # relative_width = 90
 
 = PGroongaのWAL
 
@@ -413,6 +433,12 @@ PGroongaのWALは削除しないと\n((*増え続ける*))
 = PGroongaのWALの運用方法
 
 ストリーミング\nレプリケーション\n構成の場合
+
+= PGroongaのWALの運用方法
+
+  # image
+  # src = images/pgroonga-wal-apply.png
+  # relative_width = 90
 
 = PGroongaのWALの運用方法
 
