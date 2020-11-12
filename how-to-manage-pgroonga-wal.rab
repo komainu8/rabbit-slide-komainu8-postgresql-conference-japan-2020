@@ -323,10 +323,6 @@ WALが適用\nできないケース
 
 = PGroongaのWALの注意点
 
-* PGroongaのインデックスのファイルサイズが((*増加し続ける*))
-
-= PGroongaのレプリケーション
-
   # image
   # src = images/increase-file-size.png
   # relative_width = 90
@@ -508,7 +504,6 @@ PGroongaのWALは削除しないと\n((*増え続ける*))
 * PostgreSQLはWALの最大サイズを制御できる
   * max_wal_size
   * wal_keep_segments
-* チェックポイント以前のログは\n再利用可能
 
 = PostgreSQLのWAL
 
