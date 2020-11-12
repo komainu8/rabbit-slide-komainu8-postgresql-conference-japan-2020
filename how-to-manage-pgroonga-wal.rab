@@ -262,7 +262,7 @@ REINDEXは\n時間がかかる
 
   # coderay sql
 
-    pgroonga.enable_wal = true
+    pgroonga.enable_wal = on
 
 = PGroongaのWAL
 
@@ -311,13 +311,13 @@ WALが適用\nできないケース
   # src = images/increase-file-size.png
   # relative_width = 90
 
-= PGroongaのレプリケーション
+= PGroongaのWALの注意点
 
   # image
   # src = images/vaccum.png
   # relative_width = 90
 
-= PGroongaのレプリケーション
+= PGroongaのWALの注意点
 
 なぜ？
 
